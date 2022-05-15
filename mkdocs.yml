@@ -1,5 +1,5 @@
 site_name: Textual
-site_url: https://example.com/
+site_url: https://www.textualize.io/
 
 markdown_extensions:
   - pymdownx.highlight

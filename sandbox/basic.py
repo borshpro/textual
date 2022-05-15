@@ -90,6 +90,7 @@ class BasicApp(App):
     def on_load(self):
         """Bind keys here."""
         self.bind("s", "toggle_class('#sidebar', '-active')")
+        self.bind("c", "screenshot")
 
     def on_mount(self):
         """Build layout here."""
