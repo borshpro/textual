@@ -326,7 +326,10 @@ class Widget(DOMNode):
             show_horizontal = True
         elif overflow_x == "auto":
             show_horizontal = self.virtual_size.width > width
-        if scrollbar_size_horizontal == 0:
+        if (
+            scrollbar_size_horizontal is not None
+            and scrollbar_size_horizontal.value == 0
+        ):
             show_horizontal = False
 
         show_vertical = self.show_vertical_scrollbar
@@ -336,7 +339,7 @@ class Widget(DOMNode):
             show_vertical = True
         elif overflow_y == "auto":
             show_vertical = self.virtual_size.height > height
-        if scrollbar_size_vertical == 0:
+        if scrollbar_size_vertical is not None and scrollbar_size_vertical.value == 0:
             show_vertical = False
 
         self.show_horizontal_scrollbar = show_horizontal
@@ -569,7 +572,7 @@ class Widget(DOMNode):
         ) = self._get_scrollbar_thicknesses()
         if show_horizontal_scrollbar and show_vertical_scrollbar:
             (region, _, _, _) = region.split(
-                -horizontal_scrollbar_thickness, -vertical_scrollbar_thickness
+                -vertical_scrollbar_thickness, -horizontal_scrollbar_thickness
             )
         elif show_vertical_scrollbar:
             region, _ = region.split_vertical(-vertical_scrollbar_thickness)
@@ -603,7 +606,7 @@ class Widget(DOMNode):
                 horizontal_scrollbar_region,
                 _,
             ) = region.split(
-                -horizontal_scrollbar_thickness, -vertical_scrollbar_thickness
+                -vertical_scrollbar_thickness, -horizontal_scrollbar_thickness
             )
             if vertical_scrollbar_region:
                 yield self.vertical_scrollbar, vertical_scrollbar_region
