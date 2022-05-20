@@ -9,6 +9,7 @@ from typing import AsyncContextManager, cast
 from rich.console import Console
 
 from textual import events, errors
+from textual._terminal_features import TerminalSupportedFeatures
 from textual.app import App, ReturnType, ComposeResult
 from textual.driver import Driver
 from textual.geometry import Size
@@ -41,9 +42,13 @@ class AppTest(App):
         # Let's disable all features by default
         self.features = frozenset()
 
-        # We need this so the `CLEAR_SCREEN_SEQUENCE` is always sent for a screen refresh,
+        # We need this so the iTerm2 `CLEAR_SCREEN_SEQUENCE` is always sent for a screen refresh,
         # whatever the environment:
-        self._sync_available = True
+        # (we use it to slice the output into distinct full screens displays)
+        self._terminal_features = TerminalSupportedFeatures(
+            iterm2_synchronized_update=True,
+            mode2026_synchronized_update=False,
+        )
 
         self._size = size
         self._console = ConsoleTest(width=size.width, height=size.height)
