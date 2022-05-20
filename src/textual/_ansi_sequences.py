@@ -313,3 +313,7 @@ ANSI_SEQUENCES_MODE_REPORTS: Dict[str, Tuple[Mode, ModeReportParameter]] = {
         (mode, parameter) for parameter in ModeReportParameter for mode in Mode
     ]
 }
+
+TERMINAL_MODES_ANSI_SEQUENCES: Dict[Mode, dict] = {
+    Mode.SynchronizedOutput: {"start_sync": "\x1b[?2026h", "end_sync": "\x1b[?2026l"},
+}

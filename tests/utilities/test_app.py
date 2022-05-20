@@ -9,7 +9,9 @@ from typing import AsyncContextManager, cast
 from rich.console import Console
 
 from textual import events, errors
+from textual._ansi_sequences import TERMINAL_MODES_ANSI_SEQUENCES
 from textual._terminal_features import TerminalSupportedFeatures
+from textual._terminal_modes import Mode
 from textual.app import App, ReturnType, ComposeResult
 from textual.driver import Driver
 from textual.geometry import Size
@@ -18,8 +20,9 @@ from textual.geometry import Size
 # N.B. These classes would better be named TestApp/TestConsole/TestDriver/etc,
 # but it makes pytest emit warning as it will try to collect them as classes containing test cases :-/
 
-# This value is also hard-coded in Textual's `App` class:
-CLEAR_SCREEN_SEQUENCE = "\x1bP=1s\x1b\\"
+CLEAR_SCREEN_SEQUENCE = TERMINAL_MODES_ANSI_SEQUENCES[Mode.SynchronizedOutput][
+    "start_sync"
+]
 
 
 class AppTest(App):
@@ -42,11 +45,10 @@ class AppTest(App):
         # Let's disable all features by default
         self.features = frozenset()
 
-        # We need this so the iTerm2 `CLEAR_SCREEN_SEQUENCE` is always sent for a screen refresh,
+        # We need this so the `CLEAR_SCREEN_SEQUENCE` is always sent for a screen refresh,
         # whatever the environment:
         # (we use it to slice the output into distinct full screens displays)
         self._terminal_features = TerminalSupportedFeatures(
-            iterm2_synchronized_update=True,
             mode2026_synchronized_update=False,
         )
 
